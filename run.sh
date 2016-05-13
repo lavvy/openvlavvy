@@ -1,6 +1,6 @@
 #!/bin/bash
 
-wget -O /tmp/package.tar.gz http://github.com/litzinetz-de/OpenVoucher/archive/0.4.2.tar.gz
+wget -O /tmp/package.tar.gz http://greencreate.net/lavvy/OpenVoucher/archive/0.4.2.tar.gz
 tar -zxf /tmp/package.tar.gz -C /tmp/
 cp -pr /tmp/OpenVoucher-*/src/* /var/www/
 rm -rf /var/www/.htaccess
