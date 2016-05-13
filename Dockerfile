@@ -10,5 +10,5 @@ RUN chmod 755 /*.sh
 # Add volumes for MySQL 
 VOLUME  ["/etc/mysql", "/var/lib/mysql" ]
 EXPOSE 80 3306
-CMD ["/run.sh"]
+#CMD ["/run.sh"]
   
