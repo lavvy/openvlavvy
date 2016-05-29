@@ -1,4 +1,4 @@
-FROM debian:wheezy
+FROM debian:jessie
 
 # Install packages
 ENV DEBIAN_FRONTEND noninteractive
