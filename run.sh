@@ -1,17 +1,18 @@
 #!/bin/bash
 
-#install relivant packages
-#apt-get install apache2 php5 php5-mysql sudo mysql-server
 
-#download openvoucher
-wget -O /tmp/package.tar.gz https://github.com/litzinetz-de/OpenVoucher/archive/0.4.2.tar.gz
-tar -zxf /tmp/package.tar.gz -C /tmp/
-cp -pr /tmp/OpenVoucher-*/src/* /var/www/html
-#rm -rf /var/www/.htaccess
 
-#create mysql table for openvoucher
-mysql -uroot -pbitnami -e "CREATE USER 'local'@'%' IDENTIFIED BY 'local'"     
-mysql -uroot -pbitnami -e "GRANT ALL PRIVILEGES ON *.* TO 'local'@'%' WITH GRANT OPTION"                                                                            
-#mysql -uopenvoucher -popenvoucher </app2/database/tables.sql 
-mysql -ulocal -plocal </tmp/OpenVoucher-*/database/tables.sql
+VOLUME_HOME="/var/lib/mysql"
 
+sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
+    -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php5/apache2/php.ini
+if [[ ! -d $VOLUME_HOME/mysql ]]; then
+    echo "=> An empty or uninitialized MySQL volume is detected in $VOLUME_HOME"
+    echo "=> Installing MySQL ..."
+    mysql_install_db > /dev/null 2>&1
+    echo "=> Done!"  
+    /create_mysql_admin_user.sh
+else
+    echo "=> Using an existing volume of MySQL"
+fi
+exec supervisord -n
